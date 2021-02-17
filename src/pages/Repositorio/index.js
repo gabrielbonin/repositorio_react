@@ -9,7 +9,14 @@ export default function Repositorio({match}){
   const [repositorio, setRepositorio] = useState({});
   const [issues, setIssues] = useState([]);
   const [load, setLoad] = useState(true);
-  const[page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
+
+  const [filter, setFilter] = useState('all');
+  const [ativo, setAtivo] = useState('all');
+ 
+  
+  
+ 
 
   useEffect(()=>{
 
@@ -20,7 +27,7 @@ export default function Repositorio({match}){
         api.get(`/repos/${nomeRepo}`),
         api.get(`/repos/${nomeRepo}/issues`, {
           params:{
-            state: 'open',
+            state: filter,
             per_page: 5
           }
         })
@@ -29,12 +36,13 @@ export default function Repositorio({match}){
       setRepositorio(repositorioData.data);
       setIssues(issuesData.data);
       setLoad(false);
+    
 
     }
 
     load(); 
 
-  }, [match.params.repositorio])
+  }, [match.params.repositorio, filter, ativo])
 
 
   useEffect(()=>{
@@ -42,19 +50,28 @@ export default function Repositorio({match}){
       const nomeRepo = decodeURIComponent(match.params.repositorio);
       const response = await api.get(`/repos/${nomeRepo}/issues`,{
         params:{
-          state: 'open',
+          state: filter,
           page: page,
           per_page: 5,
         }
       });
       setIssues(response.data);
+      
+      
     }
     loadIssue();
-  }, [match.params.repositorio, page])
+  }, [match.params.repositorio, filter, page, ativo])
 
   function handlePage(action){
     setPage(action === 'back' ? page - 1 : page + 1)
   }
+
+ function handleActive(action){
+  
+    setFilter(action);
+    setAtivo(action);
+    console.log(ativo);
+ }
 
   if(load){
     return (
@@ -74,6 +91,18 @@ export default function Repositorio({match}){
             <img src={repositorio.owner.avatar_url} alt="logo repositorio"/>
             <h1>{repositorio.name}</h1>
             <p>{repositorio.description}</p>
+            <S.Filter  active={ativo}>
+              <strong>Filter issues:</strong>
+              <button type="button"  onClick={()=>handleActive('all')} id="all"
+               
+              >All</button>
+              <button type="button"  onClick={()=>handleActive('open')} id="open"
+              
+              >Open</button>
+              <button type="button"  onClick={()=>handleActive('closed')} id="closed"
+             
+              >Closed</button>
+            </S.Filter>
           </S.Owner>
           <S.IssuesList>
             {issues.map(issue => (
@@ -95,8 +124,6 @@ export default function Repositorio({match}){
             <button type="button" onClick={()=>handlePage('back')}
             disabled={page < 2}
             >Voltar</button>
-
-            
             <button type="button" onClick={()=>handlePage('next')}>Proxima</button>
           </S.PageActions>
       </S.Container>

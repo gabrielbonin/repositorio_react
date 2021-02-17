@@ -49,8 +49,9 @@ export const BackButton = styled(Link)`
 `;
 
 export const IssuesList = styled.ul`
-  margin-top: 30px;
-  padding-top: 30px;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  padding-top: 15px;
   border-top: 1px solid #eee;
   list-style: none;
 
@@ -59,7 +60,7 @@ export const IssuesList = styled.ul`
     padding: 15px 10px;
 
     & + li{
-      margin-top: 12px;
+      margin-top: 10px;
     }
   }
 
@@ -115,7 +116,7 @@ export const PageActions = styled.div`
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid #eee; 
-  margin-top: 15px;
+  margin-top: 10px;
 
   button{
     outline: 0;
@@ -133,3 +134,55 @@ export const PageActions = styled.div`
     }
   }
 `;
+
+export const Filter = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 30px;
+
+  strong{
+    font-size: 16px;
+  }
+
+  button{
+    outline: 0;
+    border: none;
+    color: #FFF;
+    border-radius: 4px;
+    width: 60px;
+    height: 30px;
+    font-size: 14px;
+    border: 1px solid #DDD;
+    cursor: pointer;
+
+
+    
+}  
+    button#all{
+    background-color: ${props => props.active === 'all' ? '#0D2636' : '#DDD'};
+    &:hover{
+    transition: all 0.3s;
+    background-color: #0D2636;
+    }
+  }
+    button#open{
+    background-color: ${props => props.active === 'open'  ? 'green' : '#DDD'};
+
+    &:hover{
+    transition: all 0.3s;
+    background-color: green;
+    }
+  }
+    button#closed{
+    background-color: ${props => props.active === 'closed' ? 'darkred' : '#DDD'};
+
+    &:hover{
+    transition: all 0.3s;
+    background-color: darkred;
+    }
+  }
+`;
+
