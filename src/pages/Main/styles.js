@@ -25,7 +25,7 @@ export const Form = styled.form `
   flex-direction: row;
   input{
     flex: 1;
-    border: 1px solid #ddd;
+    border: 1px solid ${props =>  (props.error ? '#FF0000' : '#DDD')};
     padding: 10px 15px;
     border-radius: 4px;
     font-size: 17px;
@@ -84,6 +84,8 @@ export const ListRepo = styled.ul`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    font-size: 15px;
+    font-weight: bold;
 
     & + li {
       border-top: 1px solid #eee;

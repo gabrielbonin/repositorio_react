@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import * as S from './styles';
 import {FaBars, FaGithub, FaPlus, FaSpinner, FaTrash} from 'react-icons/fa';
 import api from '../../services/api';
@@ -7,18 +7,43 @@ export default function Main(){
   const [newRepo, setNewRepo] = useState('');
   const [repositorios, setRepositorios] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [alert, setAlert] = useState(null);
+
+  //buscar
+  useEffect(()=>{
+    const repoStorage = localStorage.getItem('repos');
+
+    if(repoStorage){
+      setRepositorios(JSON.parse(repoStorage));
+    }
+  }, [])
+
+
+  //salvar alterações
+  useEffect(()=>{
+    localStorage.setItem('repos', JSON.stringify(repositorios))
+  },[repositorios])
 
 
    const handleSubmit = useCallback((e)=>{
     e.preventDefault();
     
     async function submit(){
-
+      setAlert(null);
       setLoading(true);
 
       try{
+        if(newRepo === ''){
+          throw new Error('Voce precisa digitar um repositorio');
+        }
       const response = await api.get(`repos/${newRepo}`);
 
+      const hasRepo = repositorios.find(repo => repo.name === newRepo);
+      
+      if(hasRepo){
+        throw new Error("repositorio ja existe");
+      }
+      
       const data = {
       name: response.data.full_name,
       }
@@ -27,6 +52,7 @@ export default function Main(){
       console.log(response);
 
     }catch(error){
+      setAlert(true);
       console.log(error);
     }finally{
       setLoading(false);
@@ -38,6 +64,7 @@ export default function Main(){
 
   function handleinputChange(e){
     setNewRepo(e.target.value);
+    setAlert(null);
   }
 
   const handleDelete = useCallback((repo)=>{
@@ -52,7 +79,7 @@ export default function Main(){
           <FaGithub size={38}/>
           Meus repositorios
         </h1>
-          <S.Form onSubmit={handleSubmit}>
+          <S.Form onSubmit={handleSubmit} error={alert}>
               <input type="text" placeholder="adicionar repositorio"
               value={newRepo}
               onChange={handleinputChange}
