@@ -77,17 +77,17 @@ export const IssuesList = styled.ul`
     p{
       margin-top: 10px;
       font-size: 12px;
-      color: #000;
+      color: darkblue;
     }
   }
 
   strong{
-    font-size: 15px;
+    font-size: 16px;
 
   a{
     text-decoration: none;
     font-weight: bold;
-    color:  #0d2636;
+    color:  black;
     transition: 0.3s;
     
 
@@ -107,5 +107,29 @@ export const IssuesList = styled.ul`
 
   }
 
+  }
+`;
+
+export const PageActions = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #eee; 
+  margin-top: 15px;
+
+  button{
+    outline: 0;
+    border: 0;
+    background-color: #0D2636;
+    color: #FFF;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+
+
+    &:disabled{
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
   }
 `;
